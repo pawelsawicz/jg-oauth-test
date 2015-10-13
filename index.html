@@ -1,57 +1,39 @@
 <html>
 <head>
-<script src="https://identity.justgiving.com/js/connect.js"></script>
-<script src="http://knockoutjs.com/downloads/knockout-3.3.0.js"></script>
+  	<script src="https://identity.justgiving.com/js/connect.js"></script>
+    <script src="http://knockoutjs.com/downloads/knockout-3.3.0.js"></script>
 </head>
 <body>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/5gvofiXHbUI" frameborder="0" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/5gvofiXHbUI" frameborder="0" allowfullscreen></iframe>
+    <h3 data-bind="text: name"></h3>
+    <jg-login onlogin="handleLoginState" />
 
-<p>
-<a href="https://identity.sandbox.justgiving.com/connect/authorize?client_id=41cac7fc&response_type=id_token token&scope=openid account&redirect_uri=http%3A%2F%2Fv3-sandbox.justgiving.com%2F4w350m3%2Fdonation%2Fdirect%2Fcharity%2F2050%2F%3Famount%3D5.00%26exitUrl%3Dhttp%3A%2F%2Fjg-coldplay.azurewebsites.net%3FjgDonationId%3DJUSTGIVING-DONATION-ID%26currency%3DGBP%26reference%3Dcoldplay&nonce=ba3c9a58dff94a86aa633e71e6afc4e3">
-<img src="./donate-button.png" alt="Donate with JustGiving"/>
-</a>
+    <script>
 
-<p>Name of user: <strong data-bind="text: displayName"></strong></p>
-<p>Email of user: <strong data-bind="text: email"></strong></p>
-<p>User Id: <strong data-bind="text: userId"></strong></p>
+        JG.init({
+            appId: '61fbea6f',
+            environment: 'sandbox'
+        });
 
-<script>
+        var checkLoginState = function () {
+            JG.checkConnected(function (status) {
+                if (status.connected) {                 
+                    var displayName = status.displayName;
+                    var email = status.email;
+                    var userId = status.userId;
+                    var accessToken = status.accessToken;
+                    window.location.href = 'http://v3-sandbox.justgiving.com/4w350m3/donation/direct/charity/2050/?amount=5.00&exitUrl=http://jg-coldplay.azurewebsites.net?jgDonationId=JUSTGIVING-DONATION-ID&currency=GBP&reference=coldplay';                    
+                }
+            });
+        }
 
-function AppViewModel() {
-	var self = this;
-    self.displayName = "";
-    self.email = "";
-    self.userId = "";
-}
+        function OAuthViewModel(){
+        	var self = this;
+        	self.name = "Test name"
+        }
 
-ko.applyBindings(new AppViewModel());
+        ko.applyBindings(new OAuthViewModel());
 
-JG.init({
- appId: '41cac7fc',
- environment: 'sandbox'
-});
-
-var checkLoginState = function() {
- JG.checkConnected(function(status){
-	 if(!status.connected) {
-	 	alert("asdasd");
-	 	//SetOAuthInfo("status.displayName", "status.email", "status.userId");
-		//var accessToken = status.accessToken;
- 		}
- 	});
- }
-
- function SetOAuthInfo(displayName, email, userId){
-	var self = this;
-	self.displayName = displayName;
-    self.email = email;
-    self.userId = userId;
- }
-</script>
-
-</a>
-</p>
-
-</body>
+    </script>
 </body>
 </html>
